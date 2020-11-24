@@ -20,13 +20,22 @@ class Page
   end
 end
 
-Dir
-  .entries(PAGE_DIR)
-  .select { |f| File.file? File.join(PAGE_DIR, f) }
-  .each do |file|
-    puts "Rendering #{file}"
+# Various functions for compiling one or more files
+module Util
+  def self.render_file(filename)
+    puts "Rendering #{filename}"
 
-    result = Page.new(file).render
+    result = Page.new(filename).render
 
-    File.write(File.join(DIST_DIR, file), result)
+    File.write(File.join(DIST_DIR, filename), result)
   end
+
+  def self.render_all
+    Dir
+      .entries(PAGE_DIR)
+      .select { |f| File.file? File.join(PAGE_DIR, f) }
+      .each(&method(:render_file))
+  end
+end
+
+Util.render_all
