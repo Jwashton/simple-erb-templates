@@ -27,7 +27,7 @@ module Util
 
     result = Page.new(filename).render
 
-    File.write(File.join(DIST_DIR, filename), result)
+    File.write(File.join(DIST_DIR, filename.delete_suffix('.erb')), result)
   end
 
   def self.render_all
